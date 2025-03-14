@@ -1,9 +1,14 @@
 import requests
 import googlemaps
+import os
+from dotenv import load_dotenv
 
-# Replace with your actual API keys
-GOOGLE_API_KEY = "AIzaSyCYKcbRqRxAXlqWlhaUSCitcdfkmKe6T7w"  # Google Maps API key
-NASA_API_KEY = "0jcKTihYP7ZMptmzCJFvqwIgKmkz3TyLJekQEkaa"  # NASA API key (optional, can be empty "")
+# Load environment variables
+load_dotenv()
+
+# Get API keys from environment variables
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+NASA_API_KEY = os.getenv('NASA_API_KEY')
 
 # Initialize Google Maps client
 gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
