@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        :root {
+            --bg-image: url("{{ url_for('static', filename='images/solar-panel-image.jpg') }}");
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☀️ Solar Energy Calculator</h1>
+        
+        <div class="description">
+            <p>Calculate the potential solar energy output for your location. Simply enter your city, 
+            the total area of your solar panels, and their efficiency rating. Our calculator uses real 
+            solar irradiance data to estimate your daily energy production.</p>
+            <p>This tool helps you:</p>
+            <ul>
+                <li>Determine solar potential for your specific location</li>
+                <li>Estimate daily energy output in kilowatt-hours (kWh)</li>
+                <li>Make informed decisions about solar panel installations</li>
+            </ul>
+        </div>
+
+        <form id="solarForm" method="POST">
+            <div class="form-group">
+                <label for="city">📍 City Location</label>
+                <input type="text" id="city" name="city" required 
+                       placeholder="Enter your city (e.g., London, UK)">
+            </div>
+
+            <div class="form-group">
+                <label for="panel_area">📏 Total Area of Solar Panels (m²)</label>
+                <input type="number" id="panel_area" name="panel_area" required 
+                       min="0" step="0.1" placeholder="Enter panel area">
+            </div>
+
+            <div class="form-group">
+                <label>⚡ Panel Efficiency (%)</label>
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>0%</span>
+                        <span>100%</span>
+                    </div>
+                    <input type="range" id="efficiency" name="efficiency" 
+                           min="0" max="100" value="{{ efficiency|default(50) }}" 
+                           step="1">
+                    <div class="efficiency-value">
+                        Current Efficiency: <span id="efficiency-display">{{ efficiency|default(50) }}</span>%
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill" 
+                                 style="width: {{ efficiency|default(50) }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Calculate Solar Output</button>
+        </form>
+
+        {% if results %}
+        <div class="results">
+            <h2>📊 Results</h2>
+            <p><strong>Location:</strong> {{ "%.2f"|format(results.latitude) }}°N, {{ "%.2f"|format(results.longitude) }}°E</p>
+            <p><strong>Solar Irradiance:</strong> {{ "%.1f"|format(results.irradiance) }} W/m²/day</p>
+            <p><strong>Estimated Daily Energy Output:</strong> {{ "%.1f"|format(results.energy_output) }} W/day</p>
+            <p><strong>Estimated Annual Energy Output:</strong> {{ "%.1f"|format(results.annual_energy_output) }} W/year</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">
+            <p>❌ {{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const slider = document.getElementById("efficiency");
+        const display = document.getElementById("efficiency-display");
+        const progressFill = document.getElementById("progress-fill");
+
+        slider.oninput = function() {
+            display.textContent = this.value;
+            progressFill.style.width = this.value + "%";
+        };
+    </script>
+</body>
+</html>

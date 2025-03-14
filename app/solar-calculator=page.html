@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Solar Energy Calculator</h1>
+        <form id="solarForm" method="POST">
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="panel_area">Total Area of Solar Panels (m²):</label>
+            <input type="number" id="panel_area" name="panel_area" required>
+
+            <label for="panel_efficiency">Efficiency of Solar Panels (%):</label>
+            <input type="number" id="panel_efficiency" name="panel_efficiency" required>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if results %}
+        <div id="results" class="results">
+            <h2>Results:</h2>
+            <p>Latitude: {{ results.latitude }}</p>
+            <p>Longitude: {{ results.longitude }}</p>
+            <p>Solar Irradiance: {{ results.irradiance }} W/m²</p>
+            <p>Estimated Daily Energy Output: {{ results.energy_output }} kWh</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div id="error" class="error">
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
